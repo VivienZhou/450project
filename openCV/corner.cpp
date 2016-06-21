@@ -23,7 +23,8 @@ void cornerHarris_demo(int, void*);
 int main(int argc, char** argv){
     /// Load source image and convert it to gray
     //hard code
-    src = imread("/Users/zhou/Documents/VE450/image/engine_parts/1_model.png", 1);
+    src = imread("/Users/zhou/Documents/VE450/image/board/1_model.png", 1);
+    //src = imread("/Users/zhou/Documents/VE450/image/board/1_image_5.png", 1 );
     
     cvtColor(src, src_gray, CV_BGR2GRAY);
     
@@ -69,5 +70,5 @@ void cornerHarris_demo(int, void*){
     imshow(corners_window, dst_norm_scaled);
     
     //hard code, save image
-    imwrite("/Users/zhou/Documents/VE450/temp_engine.jpg", dst_norm_scaled);
+    imwrite("/Users/zhou/Documents/VE450/200_temp.jpg", dst_norm_scaled);
 }
