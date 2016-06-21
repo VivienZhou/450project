@@ -1,0 +1,23 @@
+//
+//  corner.h
+//  openCV
+//
+//  Created by Tiantong Zhou on 6/21/16.
+//  Copyright © 2016 Tiantong Zhou. All rights reserved.
+//
+
+#ifndef CORNER_H
+#define CORNER_H
+
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include <vector>
+
+/// Function header
+//return a vector that contains the positions
+std::vector<cv::Point> find_corner_position();
+
+//helper function
+void cornerHarris_demo(int, void*);
+
+#endif /* corner_h */

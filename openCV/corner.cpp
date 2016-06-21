@@ -1,26 +1,25 @@
-
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
+#include "corner.h"
 #include <iostream>
+#include <string>
 #include <stdio.h>
 #include <stdlib.h>
+
 
 using namespace cv;
 using namespace std;
 
 /// Global variables
 Mat src, src_gray, temp;
-int thresh = 200;
+vector<Point> corner_position;
+int thresh = 190;
 int max_thresh = 255;
 
-char* source_window = "Source image";
-char* corners_window = "Corners detected";
+std::string source_window = "Source image";
+std::string corners_window = "Corners detected";
 
-/// Function header
-void cornerHarris_demo(int, void*);
 
-/** @function main */
-int main(int argc, char** argv){
+
+std::vector<cv::Point> find_corner_position(){
     /// Load source image and convert it to gray
     //hard code
     src = imread("/Users/zhou/Documents/VE450/image/board/1_model.png", 1);
@@ -28,20 +27,27 @@ int main(int argc, char** argv){
     
     cvtColor(src, src_gray, CV_BGR2GRAY);
     
+    //corners record the positions of corners
+    //vector<Point> corners;
+    
     /// Create a window and a trackbar
     namedWindow(source_window, CV_WINDOW_AUTOSIZE);
     createTrackbar("Threshold: ", source_window, &thresh, max_thresh, cornerHarris_demo);
     imshow(source_window, src);
     
-    cornerHarris_demo(0, 0);
+    //corners record positions
+    cornerHarris_demo(0, &corner_position);
     
-    waitKey(0);
-    return(0);
+    //wait for such time
+    waitKey(10000);
+    return corner_position;
 }
+
 
 
 /** @function cornerHarris_demo */
 void cornerHarris_demo(int, void*){
+    corner_position.clear();
     Mat dst, dst_norm, dst_norm_scaled;
     dst = Mat::zeros(src.size(), CV_32FC1);
     
@@ -61,6 +67,7 @@ void cornerHarris_demo(int, void*){
     for(int j = 0; j < dst_norm.rows; j++){
         for(int i = 0; i < dst_norm.cols; i++){
             if((int) dst_norm.at<float>(j, i) > thresh){
+                corner_position.push_back(Point{j, i});
                 circle(dst_norm_scaled, Point(i, j), 5, Scalar(0), 2, 8, 0);
             }
         }
