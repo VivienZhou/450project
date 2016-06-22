@@ -44,7 +44,7 @@ using Method_map_t = std::map<std::string, double(*)(Mat, Mat)>;
 // method is one of the followings: "correlation", "correlation_normed", "square_diff", "square_diff_normed", "coefficient", "coefficient_normed"
 // template_mat is the matrix of the template image
 // img_window_mat is the matrix captured from the original image matrix
-double get_similarity_score(std::string method, Mat template_mat, Mat img_window_mat)
+double get_similarity_score(std::string method, Mat template_mat, Mat img_window_mat);
 
 
 #endif

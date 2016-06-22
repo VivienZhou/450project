@@ -68,7 +68,7 @@ double coefficient_normed(Mat template_mat, Mat img_window_mat) {
     return result;
 }
 
-Method_map_t method_map = map<string, double(*)(Mat, Mat)> {
+Method_map_t method_map = std::map<std::string, double(*)(Mat, Mat)> {
     {"correlation", &correlation},
     {"correlation_normed", &correlation_normed},
     {"square_diff", &square_diff},
@@ -77,7 +77,7 @@ Method_map_t method_map = map<string, double(*)(Mat, Mat)> {
     {"coefficient_normed", &coefficient_normed}
 };
 
-double get_similarity_score(string method, Mat template_mat, Mat img_window_mat) {
+double get_similarity_score(std::string method, Mat template_mat, Mat img_window_mat) {
     return method_map[method](template_mat, img_window_mat);
 }
 
