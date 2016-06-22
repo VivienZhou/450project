@@ -26,6 +26,8 @@ std::vector<cv::Point> find_corner_position(){
     //src = imread("/Users/zhou/Documents/VE450/image/board/1_image_5.png", 1 );
     
     cvtColor(src, src_gray, CV_BGR2GRAY);
+    //normalize
+    
     
     //corners record the positions of corners
     //vector<Point> corners;
