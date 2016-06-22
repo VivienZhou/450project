@@ -57,6 +57,7 @@
 		CBB7F76E1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB7F73C1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib */; };
 		CBB7F76F1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB7F73D1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib */; };
 		CBB7F7701D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB7F73E1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib */; };
+		CBD758851D1A682E001D1F3C /* similarity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBD758831D1A682E001D1F3C /* similarity.cpp */; };
 		CBFAA0AE1D15263800B52423 /* corner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBFAA0AD1D15263800B52423 /* corner.cpp */; };
 /* End PBXBuildFile section */
 
@@ -74,8 +75,6 @@
 
 /* Begin PBXFileReference section */
 		CB355EF61D1935F000F8AAF9 /* corner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = corner.h; sourceTree = "<group>"; };
-		CBA0501E1D190A0B00188E77 /* frame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = frame.cpp; sourceTree = "<group>"; };
-		CBA0501F1D190A0B00188E77 /* frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = frame.h; sourceTree = "<group>"; };
 		CBB7F7021D0EE15F00E426E8 /* openCV */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openCV; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBB7F7051D0EE15F00E426E8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		CBB7F70D1D0EE2A900E426E8 /* libopencv_calib3d.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_calib3d.3.0.0.dylib; sourceTree = "<group>"; };
@@ -128,6 +127,8 @@
 		CBB7F73C1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_videostab.3.0.0.dylib; sourceTree = "<group>"; };
 		CBB7F73D1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_videostab.3.0.0.dylib; sourceTree = "<group>"; };
 		CBB7F73E1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_videostab.3.0.0.dylib; sourceTree = "<group>"; };
+		CBD758831D1A682E001D1F3C /* similarity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = similarity.cpp; sourceTree = "<group>"; };
+		CBD758841D1A682E001D1F3C /* similarity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = similarity.h; sourceTree = "<group>"; };
 		CBFAA0AD1D15263800B52423 /* corner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = corner.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -215,8 +216,8 @@
 				CBB7F7051D0EE15F00E426E8 /* main.cpp */,
 				CBFAA0AD1D15263800B52423 /* corner.cpp */,
 				CB355EF61D1935F000F8AAF9 /* corner.h */,
-				CBA0501E1D190A0B00188E77 /* frame.cpp */,
-				CBA0501F1D190A0B00188E77 /* frame.h */,
+				CBD758831D1A682E001D1F3C /* similarity.cpp */,
+				CBD758841D1A682E001D1F3C /* similarity.h */,
 			);
 			path = openCV;
 			sourceTree = "<group>";
@@ -334,6 +335,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBD758851D1A682E001D1F3C /* similarity.cpp in Sources */,
 				CBFAA0AE1D15263800B52423 /* corner.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
