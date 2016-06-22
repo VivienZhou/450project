@@ -29,8 +29,8 @@ void MatchingMethod( int, void* );
 int main( int argc, char** argv )
 {
     //  读图片
-    img = imread( "/Users/luyoujia/Documents/study_2016Summer/VE450/template/template/template/board/1_image_5.png", 1 );
-    templ = imread( "/Users/luyoujia/Documents/study_2016Summer/VE450/template/template/template/board/1_model.png", 1 );
+    img = imread( "/Users/Haitian/Documents/CurrentSemester/VE450/450project/Data/board/1_image_5.png", 1 );
+    templ = imread( "/Users/Haitian/Documents/CurrentSemester/VE450/450project/Data/board/1_model.png", 1 );
     
     //  创建图像显示窗口
     namedWindow( image_window, CV_WINDOW_AUTOSIZE );
