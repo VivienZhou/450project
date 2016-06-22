@@ -58,7 +58,6 @@
 		CBB7F76E1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB7F73C1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib */; };
 		CBB7F76F1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB7F73D1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib */; };
 		CBB7F7701D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB7F73E1D0EE2A900E426E8 /* libopencv_videostab.3.0.0.dylib */; };
-		CBFAA0AE1D15263800B52423 /* corner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBFAA0AD1D15263800B52423 /* corner.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -336,7 +335,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DD931F71D1A694A00F0E693 /* main.cpp in Sources */,
-				CBFAA0AE1D15263800B52423 /* corner.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
