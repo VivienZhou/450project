@@ -15,9 +15,9 @@
 
 /// Function header
 //return a vector that contains the positions
-std::vector<cv::Point> find_corner_position(std::string,int thresh);
+std::vector<cv::Point> find_corner_position(cv::Mat, int thresh);
 //std::vector<cv::Point> find_corner_position(cv::Mat);
 //helper function
-std::vector<cv::Point> cornerHarris_demo(int,int thresh,cv::Mat M0);
+std::vector<cv::Point> cornerHarris_demo(int, int thresh, cv::Mat M0);
 
 #endif /* corner_h */

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6DD931F71D1A694A00F0E693 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBB7F7051D0EE15F00E426E8 /* main.cpp */; };
 		CBB7F73F1D0EE2A900E426E8 /* libopencv_calib3d.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB7F70D1D0EE2A900E426E8 /* libopencv_calib3d.3.0.0.dylib */; };
 		CBB7F7401D0EE2A900E426E8 /* libopencv_calib3d.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB7F70E1D0EE2A900E426E8 /* libopencv_calib3d.3.0.0.dylib */; };
 		CBB7F7411D0EE2A900E426E8 /* libopencv_calib3d.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB7F70F1D0EE2A900E426E8 /* libopencv_calib3d.3.0.0.dylib */; };
@@ -432,6 +431,7 @@
 		CBB7F70A1D0EE15F00E426E8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
 					/usr/local/include/opencv2,
@@ -440,6 +440,7 @@
 					/usr/local/lib,
 					"$(PROJECT_DIR)/openCV",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -447,6 +448,7 @@
 		CBB7F70B1D0EE15F00E426E8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
 					/usr/local/include/opencv2,
@@ -455,6 +457,7 @@
 					/usr/local/lib,
 					"$(PROJECT_DIR)/openCV",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

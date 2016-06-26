@@ -18,13 +18,13 @@ std::string corners_window = "Corners detected";
 
 
 
-std::vector<cv::Point> find_corner_position(string file_name, int thresh){
+std::vector<cv::Point> find_corner_position(cv::Mat src_gray, int thresh){
     /// Load source image and convert it to gray
     //hard code
     //vector<Point> corner_position
-    Mat src_gray;
+    //Mat src_gray;
     Mat dst_orign, dst_norm_origin, dst_norm_scaled_origin;
-    src_gray = imread( file_name, 0 );
+    //src_gray = imread( file_name, 0 );
     //src = imread("/Users/zhou/Documents/VE450/image/board/1_model.png", 1);
     //src = imread("/Users/zhou/Documents/VE450/image/board/1_image_5.png", 1 );
     
