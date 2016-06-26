@@ -42,6 +42,10 @@ import java.awt.image.ImageFilter;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.awt.Color;
 
 import javax.imageio.ImageIO;
 
@@ -55,29 +59,47 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.*;
 import javax.swing.filechooser.*;
+import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
+
 /*
  * SwingFileChooserDemo.java is a 1.4 application that uses these files:
  * images/Open16.gif images/Save16.gif
  */
 public class SwingFileChooserDemo extends JPanel implements ActionListener {
   static private final String newline = "\n";
+  JButton openTemplateButton; //, saveButton;
+  JButton openTestButton;
+  JButton runButton;
 
-  JButton openButton; //, saveButton;
+  //record the path!!!
+  static String templatePath = "";
+  static String testPath = "";
 
   JTextArea log;
 
   JFileChooser fc;
+  //JFileChooser fcTest;
 
-  public SwingFileChooserDemo() {
+  public SwingFileChooserDemo(String image_name) {
     super(new BorderLayout());
+
+    if (image_name.equals("run")){
+        JPanel buttonPanel = new JPanel(); //use FlowLayout
+        runButton = new JButton("run");
+        runButton.addActionListener(this);
+        buttonPanel.add(runButton, BorderLayout.CENTER);
+        add(buttonPanel);
+        return;
+    } 
 
     //Create the log first, because the action listeners
     //need to refer to it.
     log = new JTextArea(10, 40);
     log.setMargin(new Insets(5, 5, 5, 5));
     log.setEditable(false);
-    //JScrollPane logScrollPane = new JScrollPane(log);
 
     //Create a file chooser
     fc = new JFileChooser();
@@ -85,79 +107,102 @@ public class SwingFileChooserDemo extends JPanel implements ActionListener {
     fc.addChoosableFileFilter(imageFilter);
     fc.setAcceptAllFileFilterUsed(false);
 
-    //Uncomment one of the following lines to try a different
-    //file selection mode. The first allows just directories
-    //to be selected (and, at least in the Java look and feel,
-    //shown). The second allows both files and directories
-    //to be selected. If you leave these lines commented out,
-    //then the default mode (FILES_ONLY) will be used.
-    //
-    //fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    //fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
     //Create the open button. We use the image from the JLF
     //Graphics Repository (but we extracted it from the jar).
-    openButton = new JButton("Open a File...");
-        //createImageIcon("images/Open16.gif"));
-    openButton.addActionListener(this);
-
-    //For layout purposes, put the buttons in a separate panel
-    JPanel buttonPanel = new JPanel(); //use FlowLayout
-    buttonPanel.add(openButton);
-    //buttonPanel.add(saveButton);
+    JPanel buttonPanel = new JPanel();
+    if (image_name.equals("template")){
+       openTemplateButton = new JButton("Open a " + image_name + " image" );
+       openTemplateButton.addActionListener(this);
+       buttonPanel.add(openTemplateButton);
+     }else if (image_name.equals("test")){
+       openTestButton = new JButton("Open a " + image_name + " image" );
+       openTestButton.addActionListener(this);
+       buttonPanel.add(openTestButton);
+     }
 
     //Add the buttons and the log to this panel.
     add(buttonPanel, BorderLayout.PAGE_START);
     add(log, BorderLayout.CENTER);
-    //add(logScrollPane, BorderLayout.CENTER);
-    //add(imageFrame, BorderLayout.CENTER);
   }
 
 
-  public void actionPerformed(ActionEvent e) {
 
-    //Handle open button action.
-    if (e.getSource() == openButton) {
-        fc.setCurrentDirectory(new java.io.File("."));
-        fc.setDialogTitle("choosertitle");
+public void actionPerformed(ActionEvent e) {
+//Handle open button action.
+if (e.getSource() == openTemplateButton || e.getSource() == openTestButton) {
+    fc.setCurrentDirectory(new java.io.File("."));
+    fc.setDialogTitle("choosertitle");
 
-        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-          //System.out.println("getCurrentDirectory(): " + fc.getCurrentDirectory());
-          String image_url = fc.getCurrentDirectory() + fc.getSelectedFile().getName();
-          System.out.println(image_url);
-          System.out.println("getSelectedFile() : " + fc.getSelectedFile());
-          log.setText("Open image: " + image_url);
+    if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+      String path = fc.getCurrentDirectory() + fc.getSelectedFile().getName();
+      System.out.println(path);
+      System.out.println("getSelectedFile() : " + fc.getSelectedFile());
+      log.setText("Open image: " + path);
 
-          // //problem!!!!
-          // try{ 
-          //   Process process = new ProcessBuilder("print").start();
-          //   //"print" is an executable C++ program. You can change its name.
-          //   //We need to pass image_url as argv to this executable program
-          //   BufferedReader output = getOutput(process);
-          //   String ligne = "";
-          //   while ((ligne = output.readLine()) != null) {
-          //      System.out.println(ligne);
-          //   }
-          // }
-          // catch(IOException err){
-          // }
-    
+      if (e.getSource() == openTemplateButton)
+          templatePath = new String(path);
+      else
+          testPath = new String(path);
+    }
+     else {
+      System.out.println("No Selection ");
+    }
 
-        } else {
-          System.out.println("No Selection ");
-        }
+  } else if (e.getSource() == runButton){
+    //to be implemented
+    if (templatePath.equals("") || testPath.equals("")){
+      JOptionPane.showMessageDialog(null, "No image", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+    }
 
+      // //problem!!!!
+      // try{ 
+      //   System.out.println("Start");
+      //   //Process process = new ProcessBuilder("../tempExe").start();
+      //   Process process = Runtime.getRuntime().exec("../tempExe");
+      //   //int exitCode = process.waitFor();
+      //   System.out.println("End");
+      // }
+      // catch(IOException err){
+      // }
+
+    String filePath = "../tempExe";
+      if (new File(filePath).exists()) {
+          try {
+
+              ProcessBuilder pb = new ProcessBuilder(filePath);
+              pb.redirectError();
+              Process p = pb.start();
+              InputStream is = p.getInputStream();
+              int value = -1;
+              while ((value = is.read()) != -1) {
+                  System.out.print((char) value);
+              }
+
+              int exitCode = p.waitFor();
+
+              System.out.println(filePath + " exited with " + exitCode);
+          } catch (Exception er) {
+              er.printStackTrace();
+          }
       } else {
-        log.append("Open command cancelled by user." + newline);
+          System.err.println(filePath + " does not exist");
       }
-      log.setCaretPosition(log.getDocument().getLength());
-  } 
+  }
+
+  else {
+    log.append("Open command cancelled by user." + newline);
+  }
+  //log.setCaretPosition(log.getDocument().getLength());
+} 
 
   /**
    * Create the GUI and show it. For thread safety, this method should be
    * invoked from the event-dispatching thread.
    */
   private static void createAndShowGUI() {
+    Border blackline = BorderFactory.createLineBorder(Color.black);
     //Make sure we have nice window decorations.
     JFrame.setDefaultLookAndFeelDecorated(true);
     JDialog.setDefaultLookAndFeelDecorated(true);
@@ -165,11 +210,22 @@ public class SwingFileChooserDemo extends JPanel implements ActionListener {
     //Create and set up the window.
     JFrame frame = new JFrame("SwingFileChooserDemo");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.getContentPane().setLayout(new BorderLayout());
 
     //Create and set up the content pane.
-    JComponent newContentPane = new SwingFileChooserDemo();
-    newContentPane.setOpaque(true); //content panes must be opaque
-    frame.setContentPane(newContentPane);
+    JComponent newContentPaneTemplate = new SwingFileChooserDemo("template");
+    newContentPaneTemplate.setBorder(blackline);
+    newContentPaneTemplate.setOpaque(true); //content panes must be opaque
+    frame.getContentPane().add(newContentPaneTemplate, BorderLayout.WEST);
+
+        //Create and set up the content pane.
+    JComponent newContentPaneTest = new SwingFileChooserDemo("test");
+    newContentPaneTest.setBorder(blackline);
+    newContentPaneTest.setOpaque(true); //content panes must be opaque
+    frame.getContentPane().add(newContentPaneTest, BorderLayout.EAST);
+
+    JPanel controlPanel = new SwingFileChooserDemo("run");
+    frame.getContentPane().add(controlPanel, BorderLayout.SOUTH);
 
     //Display the window.
     frame.pack();
