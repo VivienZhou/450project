@@ -12,13 +12,12 @@ using namespace std;
 //vector<Point> corner_position;
 
 //int max_thresh = 255;
-
 std::string source_window = "Source image";
 std::string corners_window = "Corners detected";
 
-
-
 std::vector<cv::Point> find_corner_position(cv::Mat src_gray, int thresh){
+
+
     /// Load source image and convert it to gray
     //hard code
     //vector<Point> corner_position
@@ -68,6 +67,10 @@ std::vector<cv::Point> find_corner_position(cv::Mat src_gray, int thresh){
 
 /** @function cornerHarris_demo */
 vector<Point> cornerHarris_demo(int, int thresh,Mat M0){
+
+
+
+
     Mat dst, dst_norm, dst_norm_scaled;
     dst = Mat::zeros(M0.size(), CV_32FC1);
     vector<Point> corner_position;
@@ -94,7 +97,7 @@ vector<Point> cornerHarris_demo(int, int thresh,Mat M0){
             //cout<<"row: "<<j<<" col: "<<i<<endl;
             if((int) dst_norm.at<float>(j, i) > thresh){
                 //cout<<"row: "<<j<<" col: "<<i<<endl;
-                corner_position.push_back(Point{j, i});
+                corner_position.push_back(Point(j, i));
                 circle(dst_norm_scaled, Point(i, j), 5, Scalar(0), 2, 8, 0);
             }
         }

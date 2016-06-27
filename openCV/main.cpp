@@ -12,7 +12,7 @@
  * @author OpenCV team
  */
 
-#include "opencv2/imgcodecs.hpp"
+//#include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "corner.h"
@@ -26,13 +26,6 @@
 using namespace std;
 using namespace cv;
 
-/// Global Variables
-Mat img; Mat templ; Mat result;
-const char* image_window = "Source Image";
-const char* result_window = "Result window";
-
-int match_method;
-int max_Trackbar = 5;
 
 struct center_and_rotation_t {
     Point center;
@@ -40,23 +33,24 @@ struct center_and_rotation_t {
 };
 
 /// Function Headers
-void MatchingMethod( int, void* );
 
-center_and_rotation_t get_center_and_rotation(vector<double> replacement_mat, Point p1, Point p2);
+//center_and_rotation_t get_center_and_rotation(vector<double> replacement_mat, Point p1, Point p2);
 
 /**
  * @function main
  */
 int main( int, char** argv )
 {
+    Mat img; Mat templ; Mat result;
+
     /// Load image and template in grayscale
-    img = imread( "/Users/luyoujia/Documents/study_2016Summer/VE450/450project/Data/board/1_image_1.png", 0 );
-    templ = imread( "/Users/luyoujia/Documents/study_2016Summer/VE450/450project/Data/board/1_model.png", 0 );
+    img = imread( "Data/board/1_image_1.png", 0 );
+    templ = imread( "Data/board/1_model.png", 0 );
     
     vector<Point> templ_corners = find_corner_position(templ, 190);
     vector<Point> img_corners = find_corner_position(img, 190);
     
-    vector<pair<int, int>> putative_matches = get_putative_match(templ_corners, img_corners, templ, img);
+    vector<pair<int, int> > putative_matches = get_putative_match(templ_corners, img_corners, templ, img);
     
     
     
@@ -95,6 +89,7 @@ int main( int, char** argv )
  * @function MatchingMethod
  * @brief Trackbar callback
  */
+ /*
 void MatchingMethod( int, void* )
 {
     /// Source image to display
@@ -133,10 +128,10 @@ void MatchingMethod( int, void* )
     
     return;
 }
-
+*/
 // Input: replacement_mat: a vector with 9 doubles representing a 3*3 transformation matrix; center is the center point of template; upperleft is the upper left point of the template
 // Output: a struct containing the center of the matched teplate in the image, and the rotation angle
-
+/*
  center_and_rotation_t get_center_and_rotation(vector<double> replacement_mat, Point center, Point upperleft) {
      assert(replacement_mat.size() == 9);
      double mapped_center_x, mapped_center_y, mapped_upperleft_x, mapped_upperleft_y;
@@ -161,4 +156,4 @@ void MatchingMethod( int, void* )
  
      return res;
  }
-
+*/

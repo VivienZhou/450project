@@ -15,6 +15,7 @@
 
 /// Function header
 //return a transform matrix
-std::vector<double> ransac(std::vector<cv::Point>, std::vector<cv::Point>, std::vector<pair<int, int>>);
+std::vector<double> ransac(std::vector<cv::Point>, std::vector<cv::Point>, std::vector<pair<int, int> >);
 
 #endif /* ransac_h */
+

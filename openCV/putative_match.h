@@ -18,7 +18,7 @@ using namespace cv;
 
 /// Function header
 //return a vector that contains putative matches
-vector<pair<int, int>> get_putative_match(vector<Point> temp_corner, vector<Point> img_corner, const Mat& temp, const Mat& img);
+vector<pair<int, int> > get_putative_match(vector<Point> temp_corner, vector<Point> img_corner, const Mat& temp, const Mat& img);
 
 // helper function
 // Calculate distance between two discriptors. The center point of the discriptor is given as parameter
