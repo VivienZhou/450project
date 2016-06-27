@@ -47,8 +47,12 @@ int main( int, char** argv )
     img = imread( "Data/board/1_image_1.png", 0 );
     templ = imread( "Data/board/1_model.png", 0 );
     
-    vector<Point> templ_corners = find_corner_position(templ, 190);
-    vector<Point> img_corners = find_corner_position(img, 190);
+    Mat normalized_img, normalized_templ;
+    vector<Point> templ_corners = find_corner_position(templ, 190, normalized_templ);
+    //cout<<normalized_templ.at<float>(0,0)<<endl;
+    
+    vector<Point> img_corners = find_corner_position(img, 190, normalized_img);
+    //cout<<normalized_img.at<float>(0,0)<<endl;
     
     vector<pair<int, int> > putative_matches = get_putative_match(templ_corners, img_corners, templ, img);
     
