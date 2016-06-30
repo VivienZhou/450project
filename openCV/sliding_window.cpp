@@ -80,9 +80,9 @@ int main( int argc, char** argv ){
             }
         }
     }
-    cout << max_similarity << endl;
-    cout << best_row + image.rows / 2 << endl;
-    cout << best_col + image.cols / 2 << endl;
+    cout << "similarity score: " << max_similarity << endl;
+    cout << "row: " << best_row + image.rows / 2 << endl;
+    cout << "column: " << best_col + image.cols / 2 << endl;
 
     // Create a window for display.
     //namedWindow( "Display window", WINDOW_AUTOSIZE );
