@@ -4,4 +4,4 @@ all:
 
 slidingWindow:
 	g++ -ggdb `pkg-config --cflags --libs opencv` openCV/sliding_window.cpp -o sliding_window
-	./sliding_window Data/board/1_model.png Data/board/1_image_2.png
+	time ./sliding_window Data/board/1_model.png Data/board/1_image_2.png

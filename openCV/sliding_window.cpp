@@ -28,6 +28,7 @@ struct center_and_rotation_t {
 
 void prepare_img_val(const Mat & image, vector<vector<int> > & img_val);
 double cal_similarity(const vector<vector<int> > & templ_val, const vector<vector<int> > & image_val, int row_id, int col_id);
+Point find_match_pos(const Mat & templ, const Mat & image, int stride, int row_start, int row_end, int col_start, int col_end);
 
 /**
  * @function main
@@ -51,45 +52,27 @@ int main( int argc, char** argv ){
         return -1;
     }
 
-    //Scalar intensity = image.at<uchar>(Point(645, 491));
-    //int pix_val = intensity.val[0];
-    //cout <<  pix_val << endl;
 
-    // initialize 2D vectors that holds pixel value of the image and template
-    vector<vector<int> > image_val(image.rows, vector<int>(image.cols));
-    prepare_img_val(image, image_val);
-    vector<vector<int> > templ_val(templ.rows, vector<int>(templ.cols));
-    prepare_img_val(templ, templ_val);
+    // resize image and templ
+    double resized_factor = 0.1;
+    Mat resized_image, resized_templ;
+    resize(image, resized_image, Size(), resized_factor, resized_factor);
+    resize(templ, resized_templ, Size(), resized_factor, resized_factor);
 
     // start sliding window
-    int stride = 3;
-    double max_similarity = 0;
-    int best_row = -1;
-    int best_col = -1;
-    for (int i = 0; i <= image.rows - templ.rows; i += stride){
-        for (int j = 0; j <= image.cols - templ.cols; j += stride){
-            // calculate similarity
-            //cout << i << " " << j << endl;
-            double similarity = cal_similarity(templ_val, image_val, i, j);
-            //cout << i << " " << j << endl;
-            if (similarity > max_similarity){
-                max_similarity = similarity;
-                best_row = i;
-                best_col = j;
-                cout << max_similarity << " " << i << " " << j << endl;
-            }
-        }
-    }
-    cout << "similarity score: " << max_similarity << endl;
-    cout << "row: " << best_row + image.rows / 2 << endl;
-    cout << "column: " << best_col + image.cols / 2 << endl;
+    int stride = 1;
+    
+    // rough detection with resized image
+    Point rough_match_pos = find_match_pos(resized_templ, resized_image, stride, 
+                                    0, resized_image.rows - resized_templ.rows + 1, 
+                                    0, resized_image.cols - resized_templ.cols + 1);
 
-    // Create a window for display.
-    //namedWindow( "Display window", WINDOW_AUTOSIZE );
-    //imshow( "Display window", image );                  
-
-    // Wait for a keystroke in the window
-    //waitKey(0);                                          
+    // precise detection with original image
+    int tolerance = 1;
+    Point match_pos = find_match_pos(templ, image, stride,
+                                    (rough_match_pos.y - tolerance) / resized_factor, (rough_match_pos.y + tolerance) / resized_factor,
+                                    (rough_match_pos.x - tolerance) / resized_factor, (rough_match_pos.x + tolerance) / resized_factor);
+                                            
     return 0;
 }
 
@@ -122,6 +105,36 @@ double cal_similarity(const vector<vector<int> > & templ_val, const vector<vecto
 }
 
 
+// row_start is inclusive, row_end is exclusive
+Point find_match_pos(const Mat & templ, const Mat & image, int stride, 
+                    int row_start, int row_end, int col_start, int col_end){
+    
+    // initialize 2D vectors that holds pixel value of the image and template
+    vector<vector<int> > image_val(image.rows, vector<int>(image.cols));
+    prepare_img_val(image, image_val);
+    vector<vector<int> > templ_val(templ.rows, vector<int>(templ.cols));
+    prepare_img_val(templ, templ_val);
+
+    double max_similarity = 0;
+    int best_row = -1;
+    int best_col = -1;
+    for (int i = row_start; i < row_end; i += stride){
+        for (int j = col_start; j < col_end; j += stride){
+            double similarity = cal_similarity(templ_val, image_val, i, j);
+            if (similarity > max_similarity){
+                max_similarity = similarity;
+                best_row = i;
+                best_col = j;
+                
+            }
+        }
+    }
+    cout << "similarity score: " << max_similarity << endl;
+    cout << "row: " << best_row + templ_val.size() / 2 << endl;
+    cout << "column: " << best_col + templ_val[0].size() / 2 << endl;
+
+    return Point(best_col, best_row);
+}
 
 
 
