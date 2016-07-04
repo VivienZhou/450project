@@ -29,7 +29,7 @@ struct center_and_rotation_t {
 
 void prepare_img_val(const Mat & image, vector<vector<int> > & img_val);
 double cal_similarity(const vector<vector<int> > & templ_val, const vector<vector<int> > & image_val, int row_id, int col_id, double angle);
-center_and_rotation_t find_match_pos(const Mat & templ, const Mat & image, int stride, int row_start, int row_end, int col_start, int col_end, int angle_divide_factor, double start_angle, double end_angle);
+center_and_rotation_t find_match_pos(const Mat & templ, const Mat & image, int stride, int row_start, int row_end, int col_start, int col_end, double angle_divide_stride, double start_angle, double end_angle);
 
 /**
  * @function main
@@ -57,26 +57,44 @@ int main( int argc, char** argv ){
     // resize image and templ
     double resized_factor = 0.1;
     Mat resized_image, resized_templ;
-    resize(image, resized_image, Size(), resized_factor, resized_factor);
-    resize(templ, resized_templ, Size(), resized_factor, resized_factor);
+    resize(image, resized_image, Size(), resized_factor, resized_factor, INTER_NEAREST);
+    resize(templ, resized_templ, Size(), resized_factor, resized_factor, INTER_NEAREST);
 
     // start sliding window
     int stride = 1;
-    int angle_divide_factor = 0.01;
+    double angle_divide_factor = 0.01;
     
     // rough detection with resized image
     center_and_rotation_t rough_match_pos = find_match_pos(resized_templ, resized_image, stride,
-                                    0, resized_image.rows - resized_templ.rows + 1, 
-                                    0, resized_image.cols - resized_templ.cols + 1, angle_divide_factor, 0, 0);
-
+                                    0, resized_image.rows, 
+                                    0, resized_image.cols, angle_divide_factor, 0, 2);
+    
+    /*int x = 241;
+    int y = 275;
+    double z = 0.05;
+    vector<vector<int> > resized_image_val(resized_image.rows, vector<int>(resized_image.cols));
+    prepare_img_val(resized_image, resized_image_val);
+    vector<vector<int> > resized_templ_val(resized_templ.rows, vector<int>(resized_templ.cols));
+    prepare_img_val(resized_templ, resized_templ_val);
+    cout<<x/10 + (cos(z) * -1*125 - sin(z) * -1*199)/10<<" "<<y/10 + (sin(z) * -1*125 + cos(z) * -1*199)/10<<endl;
+    cout<<cal_similarity(resized_templ_val, resized_image_val, x/10 + (cos(z) * -1*125 - sin(z) * -1*199)/10, y/10 + (sin(z) * -1*125 + cos(z) * -1*199)/10, z)<<endl;
+    */
+    
     // precise detection with original image
     int tolerance = 1;
     center_and_rotation_t match_pos = find_match_pos(templ, image, stride,
-                                    (rough_match_pos.y - tolerance) / resized_factor, (rough_match_pos.y + tolerance) / resized_factor,
-                                    (rough_match_pos.x - tolerance) / resized_factor, (rough_match_pos.x + tolerance) / resized_factor,
-                                    angle_divide_factor, (rough_match_pos.rotation_angle - tolerance) / angle_divide_factor,
-                                    (rough_match_pos.rotation_angle + tolerance) / angle_divide_factor);
-                                            
+                                    (rough_match_pos.center.y - tolerance) / resized_factor, (rough_match_pos.center.y + tolerance) / resized_factor,
+                                    (rough_match_pos.center.x - tolerance) / resized_factor, (rough_match_pos.center.x + tolerance) / resized_factor,
+                                    angle_divide_factor, rough_match_pos.rotation_angle - tolerance * angle_divide_factor,
+                                    rough_match_pos.rotation_angle
+                                     + tolerance * angle_divide_factor);
+     
+    /*vector<vector<int> > image_val(image.rows, vector<int>(image.cols));
+    prepare_img_val(image, image_val);
+    vector<vector<int> > templ_val(templ.rows, vector<int>(templ.cols));
+    prepare_img_val(templ, templ_val);
+    cout<<287 + (cos(3.6) * -1*125 - sin(3.6) * -1*199)<<" "<<352 + (sin(3.6) * -1*125 + cos(3.6) * -1*199)<<endl;
+    cout<<cal_similarity(templ_val, image_val, 287 + (cos(3.6) * -1*125 - sin(3.6) * -1*199), 352 + (sin(3.6) * -1*125 + cos(3.6) * -1*199), 3.6)<<endl;*/
     return 0;
 }
 
@@ -99,11 +117,12 @@ double cal_similarity(const vector<vector<int> > & templ_val, const vector<vecto
     int sum_j2 = 0; // vector length of image
     for (int i = 0; i < templ_val.size(); i ++){
         for (int j = 0; j < templ_val[0].size(); j ++){
-            int new_x = cos(angle) * i - sin(angle) * j + row_id;
-            int new_y = cos(angle) * i + sin(angle) * j + col_id;
+            int new_x = (int) (cos(angle) * i - sin(angle) * j) + row_id;
+            int new_y = (int) (sin(angle) * i + cos(angle) * j) + col_id;
             int image_pix = 0;
             if (new_x >= 0 && new_y >= 0 && new_x < image_val.size() && new_y < image_val[0].size())
                 image_pix = image_val[new_x][new_y];
+            //cout<<i<<" "<<j<<" "<<new_x<<" "<<new_y<<" "<<image_pix<<endl;
             int templ_pix = templ_val[i][j];
             sum_ij += templ_pix * image_pix;
             sum_j2 += image_pix * image_pix;
@@ -115,7 +134,7 @@ double cal_similarity(const vector<vector<int> > & templ_val, const vector<vecto
 
 // row_start is inclusive, row_end is exclusive
 center_and_rotation_t find_match_pos(const Mat & templ, const Mat & image, int stride,
-                    int row_start, int row_end, int col_start, int col_end, int angle_divide_stride, double start_angle, double end_angle){
+                    int row_start, int row_end, int col_start, int col_end, double angle_divide_stride, double start_angle, double end_angle){
     
     // initialize 2D vectors that holds pixel value of the image and template
     vector<vector<int> > image_val(image.rows, vector<int>(image.cols));
@@ -124,12 +143,17 @@ center_and_rotation_t find_match_pos(const Mat & templ, const Mat & image, int s
     prepare_img_val(templ, templ_val);
 
     double max_similarity = 0;
+    //top-left corner
     int best_row = -1;
     int best_col = -1;
+    //actual angle = best_angle * PI
     double best_angle = 0;
     for (int i = row_start; i < row_end; i += stride){
         for (int j = col_start; j < col_end; j += stride){
             for (double angle = start_angle; angle <= end_angle; angle += angle_divide_stride){
+                
+                //cout << "@@@ " << i << " " << j << " " << angle << endl;
+                
                 double similarity = cal_similarity(templ_val, image_val, i, j, angle * PI);
                 if (similarity > max_similarity){
                     max_similarity = similarity;
@@ -141,9 +165,11 @@ center_and_rotation_t find_match_pos(const Mat & templ, const Mat & image, int s
         }
     }
     cout << "similarity score: " << max_similarity << endl;
-    cout << "row: " << best_row + templ_val.size() / 2 << endl;
-    cout << "column: " << best_col + templ_val[0].size() / 2 << endl;
-    cout << "angle: " << best_angle << endl;
+    int new_x = (int) templ_val.size() / 2;
+    int new_y = (int) templ_val[0].size() / 2;
+    cout << "row: " << best_row + (int) (cos(best_angle * PI) * new_x - sin(best_angle * PI) * new_y) << endl;
+    cout << "column: " << best_col + (int) (sin(best_angle * PI) * new_x + cos(best_angle * PI) * new_y) << endl;
+    cout << "angle: " << best_angle * PI << endl;
 
     center_and_rotation_t result;
     result.center = Point(best_col, best_row);
