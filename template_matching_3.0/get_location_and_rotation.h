@@ -22,10 +22,14 @@ struct center_and_angle_t {
 };
 
 center_and_angle_t cal_original_coordinate(int rotated_image_rows, int rotated_image_cols,
-                             int image_rows, int image_cols,
-                             int rotated_coord_row, int rotated_coord_col,
-                             double rotation_angle);
+                                           int image_rows, int image_cols,
+                                           int rotated_coord_row, int rotated_coord_col,
+                                           double rotation_angle);
 
-center_and_angle_t get_location_and_rotation(std::string templ_dir, std::string test_img_dir, double rotation_start = 0, double rotation_end = 360, double rotation_stride = 1);
+cv::Mat rotate_and_crop(cv::Mat input_img, double angle, cv::Rect ROI);
+
+cv::Mat cal_similarity_score(cv::Mat templ_img, cv::Mat test_img, double angle);
+
+center_and_angle_t get_location_and_rotation(cv::Mat templ_img, cv::Mat test_img, double rotation_start = 0, double rotation_end = 360, double rotation_stride = 1);
 
 #endif 
