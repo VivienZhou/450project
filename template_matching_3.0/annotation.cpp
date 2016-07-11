@@ -9,8 +9,8 @@ using namespace cv;
 
 
 void draw_boundary(const center_and_angle_t& object_info, int scaleCol, int scaleRow, Mat& test_img){
-    double coord[2][5] = {{- scaleCol/2, scaleCol/2, scaleCol/2, - scaleCol/2, - scaleCol/2},
-        {- scaleRow/2, - scaleRow/2, scaleRow/2, scaleRow/2, - scaleRow/2}};
+    double coord[2][5] = {{- scaleCol/2.0, scaleCol/2.0, scaleCol/2.0, - scaleCol/2.0, - scaleCol/2.0},
+        {- scaleRow/2.0, - scaleRow/2.0, scaleRow/2.0, scaleRow/2.0, - scaleRow/2.0}};
     
     double alpha = -object_info.angle;
     double cos_alpha = cos(alpha);

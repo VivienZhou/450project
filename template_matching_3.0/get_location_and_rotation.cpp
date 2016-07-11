@@ -36,7 +36,7 @@ center_and_angle_t cal_original_coordinate(int rotated_image_rows, int rotated_i
 }
 
 //===============================================
-Mat rotate_and_crop(cv::Mat test_img, double angle, cv::Rect ROI) {
+Mat rotate_and_crop(const cv::Mat &test_img, double angle, const cv::Rect &ROI) {
     Mat test_rotate_img;
     
     //template matching
@@ -73,7 +73,7 @@ Mat rotate_and_crop(cv::Mat test_img, double angle, cv::Rect ROI) {
 }
 
 //===============================================
-Mat cal_similarity_score(cv::Mat templ_img, cv::Mat test_img, double angle) {
+Mat cal_similarity_score(const cv::Mat &templ_img, const cv::Mat &test_img, double angle) {
     Mat result;
     int result_cols;
     int result_rows;
@@ -98,7 +98,7 @@ Mat cal_similarity_score(cv::Mat templ_img, cv::Mat test_img, double angle) {
 }
 
 //===============================================
-center_and_angle_t get_location_and_rotation(cv::Mat templ_img, cv::Mat test_img, double rotation_start, double rotation_end, double rotation_stride) {
+center_and_angle_t get_location_and_rotation(const cv::Mat &templ_img, const cv::Mat &test_img, double rotation_start, double rotation_end, double rotation_stride) {
     //read image
 
     Mat test_rotate_img;
