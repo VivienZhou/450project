@@ -1,11 +1,14 @@
 
 #include "annotation.h"
+#include <iostream>
+#include <cmath>
+#include <string>
 
 using namespace std;
 using namespace cv;
 
 
-void draw_boundary(const center_and_angle_t& object_info, int scaleCol, int scaleRow, cv::Mat& test_img){
+void draw_boundary(const center_and_angle_t& object_info, int scaleCol, int scaleRow, Mat& test_img){
     double coord[2][5] = {{- scaleCol/2, scaleCol/2, scaleCol/2, - scaleCol/2, - scaleCol/2},
         {- scaleRow/2, - scaleRow/2, scaleRow/2, scaleRow/2, - scaleRow/2}};
     

@@ -10,16 +10,11 @@
 
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "utility.h"
 #include <iostream>
 #include <cmath>
 #include <string>
 
-const double PI = 3.14159265359;
-
-struct center_and_angle_t {
-    cv::Point center;
-    double angle;
-};
 
 center_and_angle_t cal_original_coordinate(int rotated_image_rows, int rotated_image_cols,
                                            int image_rows, int image_cols,
