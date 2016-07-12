@@ -36,5 +36,32 @@ void draw_boundary(const center_and_angle_t& object_info, int scaleCol, int scal
     line(test_img, pt2, pt3, cv::Scalar(0, 0, 255), 2, 8, 0);
     line(test_img, pt3, pt4, cv::Scalar(0, 0, 255), 2, 8, 0);
     line(test_img, pt4, pt5, cv::Scalar(0, 0, 255), 2, 8, 0);
+    
+    //draw information
+    ostringstream the_angle;
+    the_angle <<object_info.angle;
+    string myangle = the_angle.str();
+    string text_angle = "Angle: " + myangle;
+    Point pt_angle(5,30);
+    Scalar color_angle = CV_RGB(255,0,0);
+    putText(test_img,text_angle,pt_angle,CV_FONT_HERSHEY_TRIPLEX,0.7f,color_angle);
+    
+    ostringstream cols;
+    cols <<object_info.center.x;
+    string mycols = cols.str();
+    string text_col = "cols(x): " + mycols;
+    Point point_col(5,60);
+    Scalar color_col = CV_RGB(255,0,0);
+    putText(test_img,text_col,point_col,CV_FONT_HERSHEY_TRIPLEX,0.7f,color_col);
+    
+    ostringstream rows;
+    rows <<object_info.center.y;
+    string myrows = rows.str();
+    string text_row = "rows(y): " + myrows;
+    Point point_row(5,90);
+    Scalar color_row = CV_RGB(255,0,0);
+    putText(test_img,text_row,point_row,CV_FONT_HERSHEY_TRIPLEX,0.7f,color_row);
+    
+    
     imshow( "annotation", test_img);
 }
