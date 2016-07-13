@@ -12,5 +12,6 @@ struct center_and_angle_t {
     double angle;
 };
 
+double radians_to_degree(double angle_rad);
 
 #endif
