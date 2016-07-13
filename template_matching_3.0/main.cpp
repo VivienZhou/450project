@@ -19,11 +19,11 @@ using namespace cv;
 int main( int argc, char** argv )
 {
     //read image
-    //Mat templ_img = imread("/Users/zhou/Documents/VE450/450project/Data/board/1_model.png", 0);
-    //Mat test_img = imread("/Users/zhou/Documents/VE450/450project/Data/board/1_image_1.png", 0);
+    Mat templ_img = imread("/Users/luyoujia/Documents/study_2016Summer/VE450/template/board/1_model.png", 0);
+    Mat test_img = imread("/Users/luyoujia/Documents/study_2016Summer/VE450/template/board/1_image_3.png", 0);
 
-    Mat templ_img = imread(argv[1], 0);
-    Mat test_img = imread(argv[2], 0);
+    //Mat templ_img = imread(argv[1], 0);
+    //Mat test_img = imread(argv[2], 0);
     center_and_angle_t result = get_location_and_rotation(templ_img, test_img, 0, 360, 1);
 
     //annotate the image
