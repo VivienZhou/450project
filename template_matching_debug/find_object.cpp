@@ -44,7 +44,7 @@ vector<center_and_angle_t> find_object(Mat value, Mat angle, int nearby_size, do
             if(is_highest(i, j, nearby_size, value) == true){
                 struct center_and_angle_t object;
                 object.center = Point(j,i);
-                object.angle = angle.at<float>(i,j);
+                object.angle = (360 - angle.at<float>(i,j)) / 180 * 3.1416;
                 objects.push_back(object);
             }
         }

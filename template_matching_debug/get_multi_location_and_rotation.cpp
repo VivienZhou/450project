@@ -5,30 +5,41 @@ using namespace std;
 using namespace cv;
 
 
-vector<center_and_angle_t> get_multi_location_and_rotation(const Mat & templ_img, const Mat & test_img, double rotation_start, double rotation_end, double rotation_stride){
+vector<center_and_angle_t> get_multi_location_and_rotation(const Mat & templ_img, const Mat & test_img, double threshold, double rotation_start, double rotation_end, double rotation_stride){
 	Mat tmp_score;
-	Mat max_score = Mat::zeros(test_img.rows - templ_img.rows + 1, test_img.cols - templ_img.cols + 1, CV_32F);
-	Mat best_pos = Mat::zeros(test_img.rows - templ_img.rows + 1, test_img.cols - templ_img.cols + 1, CV_32F);
-	cout << max_score.at<float>(0, 0) << endl;
+	Mat max_score = Mat::zeros(test_img.rows, test_img.cols, CV_32F);
+	Mat best_pos = Mat::zeros(test_img.rows, test_img.cols, CV_32F);
+	//cout << max_score.at<float>(0, 0) << endl;
 
 	int nearby_size = 5;
-	double threshold = 100;
 	
 	for (int angle = rotation_start; angle < rotation_end; angle += rotation_stride){
 		Mat rotated_tmp_score = cal_similarity_score(templ_img, test_img, angle);
-		cout << rotated_tmp_score.at<float>(0, 0) << endl;
+		//cout << rotated_tmp_score.at<float>(0, 0) << endl;
 		// rotate the Mat back to original direction
-		int side_length = sqrt(rotated_tmp_score.cols * rotated_tmp_score.cols + rotated_tmp_score.rows * rotated_tmp_score.rows);
+
+
+
+
+
+		Mat padded_score = Mat::zeros(rotated_tmp_score.rows + templ_img.rows, rotated_tmp_score.cols + templ_img.cols, CV_32F);
+		int row_start = templ_img.rows / 2;
+		int col_start = templ_img.cols / 2;
+		rotated_tmp_score.copyTo(padded_score.rowRange(row_start, row_start + rotated_tmp_score.rows).colRange(col_start, col_start + rotated_tmp_score.cols));
+
+
+		int side_length = sqrt(padded_score.cols * padded_score.cols + padded_score.rows * padded_score.rows);
 		//cout << side_length << endl;
-		Rect myROI(side_length / 2 - test_img.cols / 2 + templ_img.cols / 2, side_length / 2 - test_img.rows / 2 + templ_img.rows / 2, test_img.cols - templ_img.cols + 1, test_img.rows - templ_img.rows + 1);
+		Rect myROI(side_length / 2 - test_img.cols / 2, side_length / 2 - test_img.rows / 2, test_img.cols, test_img.rows);
 		//cout << myROI.height << endl;
 		//cout << myROI.width << endl;
 		//cout << myROI.x << endl;
 		//cout << myROI.y << endl;
-		tmp_score = rotate_and_crop(rotated_tmp_score, - angle, myROI, false);
+		//cout << "len / 2: " << side_length / 2 << endl;
+		tmp_score = rotate_and_crop(padded_score, - angle, myROI, false);
 		//imshow("test", tmp_score);
 		//waitKey(0);
-		cout << tmp_score.at<float> (100, 100);
+		//cout << tmp_score.at<float> (100, 100);
 		pair_wise_mat_max(max_score, tmp_score, best_pos, angle);
 		//break;
 
@@ -52,6 +63,7 @@ void pair_wise_mat_max(Mat & max_score, const Mat & tmp_score, Mat & best_pos, i
 				max_score.at<float>(i, j) = tmp_score.at<float>(i, j);
 				//cout << max_score.at<float>(i, j) << endl;
 				best_pos.at<float>(i, j) = angle;
+				
 			}
 		}
 	}

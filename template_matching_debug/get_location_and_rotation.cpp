@@ -54,7 +54,7 @@ Mat rotate_and_crop(const cv::Mat &test_img, double angle, const cv::Rect &ROI, 
     int row_start = dsize.height / 2 - test_rows / 2;
     int col_start = dsize.width / 2 - test_cols / 2;
     
-    imshow("12", test_img);
+    //imshow("12", test_img);
     //fill with test image
     Mat new_test_img;
     if (is_int)
@@ -65,10 +65,10 @@ Mat rotate_and_crop(const cv::Mat &test_img, double angle, const cv::Rect &ROI, 
     test_img.copyTo(new_test_img.rowRange(row_start, row_start + test_rows).colRange(col_start, col_start + test_cols));
     
     //rotate
-    imshow("123", new_test_img);
+    //imshow("123", new_test_img);
     rot_mat = getRotationMatrix2D(center, angle, scale);
     warpAffine(new_test_img, test_rotate_img, rot_mat, dsize);
-    imshow("1234", test_rotate_img);
+    //imshow("1234", test_rotate_img);
     //crop
     //osize.width = abs(test_img.cols * cos(angle/180*PI)) + abs(test_img.rows * sin(angle/180*PI));
     //osize.height = abs(test_img.cols * sin(angle/180*PI)) + abs(test_img.rows * cos(angle/180*PI));
