@@ -35,6 +35,7 @@
  */
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,6 +47,9 @@ import java.io.OutputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.net.URL;
+import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
@@ -63,6 +67,8 @@ import javax.swing.border.*;
 import javax.swing.filechooser.*;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+
 
 /*
  * SwingFileChooserDemo.java is a 1.4 application that uses these files:
@@ -78,7 +84,8 @@ public class SwingFileChooserDemo extends JPanel implements ActionListener {
   static String templatePath = "";
   static String testPath = "";
 
-  JTextArea log;
+  static JLabel testLog = new JLabel(new ImageIcon("/Users/zhou/Documents/VE450/450project/UI/blank.png"));
+  static JLabel tempLog = new JLabel(new ImageIcon("/Users/zhou/Documents/VE450/450project/UI/blank.png"));
 
   JFileChooser fc;
   //JFileChooser fcTest;
@@ -95,11 +102,9 @@ public class SwingFileChooserDemo extends JPanel implements ActionListener {
         return;
     } 
 
-    //Create the log first, because the action listeners
-    //need to refer to it.
-    log = new JTextArea(10, 40);
-    log.setMargin(new Insets(5, 5, 5, 5));
-    log.setEditable(false);
+
+    //log.setMargin(new Insets(5, 5, 5, 5));
+    //log.setEditable(false);
 
     //Create a file chooser
     fc = new JFileChooser();
@@ -112,18 +117,24 @@ public class SwingFileChooserDemo extends JPanel implements ActionListener {
     //Graphics Repository (but we extracted it from the jar).
     JPanel buttonPanel = new JPanel();
     if (image_name.equals("template")){
+       tempLog.setPreferredSize(new Dimension(450, 450));
        openTemplateButton = new JButton("Open a " + image_name + " image" );
        openTemplateButton.addActionListener(this);
        buttonPanel.add(openTemplateButton);
+       add(buttonPanel, BorderLayout.PAGE_START);
+       add(tempLog, BorderLayout.CENTER);
      }else if (image_name.equals("test")){
+       testLog.setPreferredSize(new Dimension(700, 500));
        openTestButton = new JButton("Open a " + image_name + " image" );
        openTestButton.addActionListener(this);
        buttonPanel.add(openTestButton);
+       add(buttonPanel, BorderLayout.PAGE_START);
+       add(testLog, BorderLayout.CENTER);
      }
 
     //Add the buttons and the log to this panel.
-    add(buttonPanel, BorderLayout.PAGE_START);
-    add(log, BorderLayout.CENTER);
+    // add(buttonPanel, BorderLayout.PAGE_START);
+    // add(log, BorderLayout.CENTER);
   }
 
 
@@ -135,15 +146,18 @@ if (e.getSource() == openTemplateButton || e.getSource() == openTestButton) {
     fc.setDialogTitle("choosertitle");
 
     if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-      String path = fc.getCurrentDirectory() + fc.getSelectedFile().getName();
+      String path = fc.getCurrentDirectory() + "/" + fc.getSelectedFile().getName();
       System.out.println(path);
       System.out.println("getSelectedFile() : " + fc.getSelectedFile());
-      log.setText("Open image: " + path);
 
-      if (e.getSource() == openTemplateButton)
+      if (e.getSource() == openTemplateButton){
           templatePath = new String(path);
-      else
+          tempLog.setIcon(new ImageIcon(path));
+      }
+      else{
           testPath = new String(path);
+          testLog.setIcon(new ImageIcon(path));
+      }
     }
      else {
       System.out.println("No Selection ");
@@ -156,32 +170,28 @@ if (e.getSource() == openTemplateButton || e.getSource() == openTestButton) {
                                     JOptionPane.ERROR_MESSAGE);
     }
 
-      // //problem!!!!
-      // try{ 
-      //   System.out.println("Start");
-      //   //Process process = new ProcessBuilder("../tempExe").start();
-      //   Process process = Runtime.getRuntime().exec("../tempExe");
-      //   //int exitCode = process.waitFor();
-      //   System.out.println("End");
-      // }
-      // catch(IOException err){
-      // }
-
-    String filePath = "../tempExe";
+    String filePath = "/Users/zhou/Documents/VE450/450project/template_matching_3.0/tempExe";
       if (new File(filePath).exists()) {
           try {
 
-              ProcessBuilder pb = new ProcessBuilder(filePath);
+              ProcessBuilder pb = new ProcessBuilder(filePath, templatePath, testPath);
               pb.redirectError();
               Process p = pb.start();
               InputStream is = p.getInputStream();
-              int value = -1;
-              while ((value = is.read()) != -1) {
-                  System.out.print((char) value);
-              }
+              // int value = -1;
+              // while ((value = is.read()) != -1) {
+              //     System.out.print((char) value);
+              // }
 
               int exitCode = p.waitFor();
 
+              //change image directly
+              try{
+                BufferedImage bufImg=ImageIO.read(new File("/Users/zhou/Documents/VE450/450project/UI/annotation.jpg"));
+                testLog.setIcon(new ImageIcon(bufImg));
+              }catch(IOException ex){
+               System.out.println("Unable to read image file");
+              }
               System.out.println(filePath + " exited with " + exitCode);
           } catch (Exception er) {
               er.printStackTrace();
@@ -190,11 +200,6 @@ if (e.getSource() == openTemplateButton || e.getSource() == openTestButton) {
           System.err.println(filePath + " does not exist");
       }
   }
-
-  else {
-    log.append("Open command cancelled by user." + newline);
-  }
-  //log.setCaretPosition(log.getDocument().getLength());
 } 
 
   /**
@@ -207,8 +212,12 @@ if (e.getSource() == openTemplateButton || e.getSource() == openTestButton) {
     JFrame.setDefaultLookAndFeelDecorated(true);
     JDialog.setDefaultLookAndFeelDecorated(true);
 
+    JPanel northPan = new JPanel(new BorderLayout());
+    JPanel centerPan = new JPanel(new FlowLayout());
+    JPanel southPan = new JPanel(new FlowLayout());
+
     //Create and set up the window.
-    JFrame frame = new JFrame("SwingFileChooserDemo");
+    JFrame frame = new JFrame("TemplateMatchingDemo");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.getContentPane().setLayout(new BorderLayout());
 
@@ -216,17 +225,25 @@ if (e.getSource() == openTemplateButton || e.getSource() == openTestButton) {
     JComponent newContentPaneTemplate = new SwingFileChooserDemo("template");
     newContentPaneTemplate.setBorder(blackline);
     newContentPaneTemplate.setOpaque(true); //content panes must be opaque
-    frame.getContentPane().add(newContentPaneTemplate, BorderLayout.WEST);
+    //frame.getContentPane().add(newContentPaneTemplate, BorderLayout.WEST);
 
-        //Create and set up the content pane.
+    //Create and set up the content pane.
     JComponent newContentPaneTest = new SwingFileChooserDemo("test");
     newContentPaneTest.setBorder(blackline);
     newContentPaneTest.setOpaque(true); //content panes must be opaque
-    frame.getContentPane().add(newContentPaneTest, BorderLayout.EAST);
+    //frame.getContentPane().add(newContentPaneTest, BorderLayout.EAST);
 
+    northPan.add(newContentPaneTemplate, BorderLayout.WEST);
+    northPan.add(newContentPaneTest, BorderLayout.CENTER);
+
+    //show image
     JPanel controlPanel = new SwingFileChooserDemo("run");
-    frame.getContentPane().add(controlPanel, BorderLayout.SOUTH);
+    //frame.getContentPane().add(controlPanel, BorderLayout.CENTER);
+    centerPan.add(controlPanel);
 
+
+    frame.getContentPane().add(northPan, BorderLayout.NORTH);
+    frame.getContentPane().add(centerPan, BorderLayout.CENTER);
     //Display the window.
     frame.pack();
     frame.setVisible(true);

@@ -19,8 +19,8 @@ using namespace cv;
 int main( int argc, char** argv )
 {
     //read image
-    // Mat templ_img = imread("/Users/liyihan/Downloads/pack/test/board/1_model.png", 0);
-    // Mat test_img = imread("/Users/liyihan/Downloads/pack/test/board/1_image_1.png", 0);
+    //Mat templ_img = imread("/Users/zhou/Documents/VE450/450project/Data/board/1_model.png", 0);
+    //Mat test_img = imread("/Users/zhou/Documents/VE450/450project/Data/board/1_image_1.png", 0);
 
     Mat templ_img = imread(argv[1], 0);
     Mat test_img = imread(argv[2], 0);
@@ -29,7 +29,7 @@ int main( int argc, char** argv )
     //annotate the image
     draw_boundary(result, templ_img.cols, templ_img.rows, test_img);
 
-    waitKey(0);
+    //waitKey(0);
     return 0;
 }
 

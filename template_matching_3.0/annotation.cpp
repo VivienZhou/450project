@@ -63,5 +63,6 @@ void draw_boundary(const center_and_angle_t& object_info, int scaleCol, int scal
     putText(test_img,text_row,point_row,CV_FONT_HERSHEY_TRIPLEX,0.7f,color_row);
     
     
-    imshow( "annotation", test_img);
+    imwrite( "annotation.jpg", test_img);
+    //imshow( "annotation", test_img);
 }
