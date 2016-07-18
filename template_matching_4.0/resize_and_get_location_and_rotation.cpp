@@ -12,7 +12,7 @@ using namespace std;
 using namespace cv;
 
 center_and_angle_t resize_and_get_location_and_rotation(const Mat &templ_img, const Mat &test_img) {
-    double resize_factor = 0.2;
+    double resize_factor = 0.4;
     Mat resized_test_img, resized_templ_img;
     resize(test_img, resized_test_img, Size(), resize_factor, resize_factor, INTER_NEAREST);
     resize(templ_img, resized_templ_img, Size(), resize_factor, resize_factor, INTER_NEAREST);

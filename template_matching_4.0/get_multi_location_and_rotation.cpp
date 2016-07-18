@@ -5,13 +5,13 @@ using namespace std;
 using namespace cv;
 
 
-vector<center_and_angle_t> get_multi_location_and_rotation(const Mat & templ_img, const Mat & test_img, double threshold, double rotation_start, double rotation_end, double rotation_stride){
+vector<center_and_angle_t> get_multi_location_and_rotation(const Mat & templ_img, const Mat & test_img, int nearby_size, double threshold, double rotation_start, double rotation_end, double rotation_stride){
 	Mat tmp_score;
 	Mat max_score = Mat::zeros(test_img.rows, test_img.cols, CV_32F);
 	Mat best_pos = Mat::zeros(test_img.rows, test_img.cols, CV_32F);
 	//cout << max_score.at<float>(0, 0) << endl;
 
-	int nearby_size = 5;
+	//int nearby_size = 9;
 	
 	for (int angle = rotation_start; angle < rotation_end; angle += rotation_stride){
 		Mat rotated_tmp_score = cal_similarity_score(templ_img, test_img, angle);

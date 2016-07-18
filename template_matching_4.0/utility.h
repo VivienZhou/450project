@@ -14,4 +14,10 @@ struct center_and_angle_t {
 
 double radians_to_degree(double angle_rad);
 
+struct parameter_t{
+	double resize_factor;
+	double threshold;
+	int nearby_size;
+};
+
 #endif
