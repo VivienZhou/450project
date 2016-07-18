@@ -42,6 +42,7 @@ vector<center_and_angle_t> find_object(Mat value, Mat angle, int nearby_size, do
             }
             //cout << value.at<float>(i, j) << endl;
             if(is_highest(i, j, nearby_size, value) == true){
+                value.at<float>(i, j) = value.at<float>(i, j) + 256;
                 struct center_and_angle_t object;
                 object.center = Point(j,i);
                 object.angle = (360 - angle.at<float>(i,j)) / 180 * 3.1416;
