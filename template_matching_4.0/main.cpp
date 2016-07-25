@@ -31,8 +31,8 @@ int main( int argc, char** argv )
     //Mat test_img = imread(argv[2], 0);
 
     parameter_t para;
-    para.resize_factor = 1;
-    para.threshold = 0.85;
+    para.resize_factor = 0.2;
+    para.threshold = 0.6;
     para.nearby_size = 9;
 
     //center_and_angle_t result = resize_and_get_location_and_rotation(templ_img, test_img);
@@ -54,7 +54,8 @@ int main( int argc, char** argv )
         Point upper_left_corner;
         Mat cropped_img = crop_img(test_img, upper_left_corner, crop_size, rough_centers_and_angles[i].center, para.resize_factor);
         // error checking, if cropped_img is smaller than templ_img, ignore this point
-        if (cropped_img.rows < templ_img.rows || cropped_img.cols < templ_img.cols) {
+        double min_side = min(cropped_img.rows, cropped_img.cols);
+        if (min_side < templ_img.rows || min_side < templ_img.cols) {
             continue;
         }
         center_and_angle_t result = get_accurate_center_and_angle(cropped_img, templ_img, upper_left_corner, rough_centers_and_angles[i].angle);
