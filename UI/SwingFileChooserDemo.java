@@ -67,7 +67,12 @@ import javax.swing.border.*;
 import javax.swing.filechooser.*;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.util.Hashtable;
+
 
 
 /*
@@ -79,6 +84,19 @@ public class SwingFileChooserDemo extends JPanel implements ActionListener {
   JButton openTemplateButton; //, saveButton;
   JButton openTestButton;
   JButton runButton;
+
+  ChangeListener resizeListener;
+  static Double resizeVal;
+  static JTextField resizeText = new JTextField(3);
+
+  ChangeListener threshholdListener;
+  static Double threshholdVal;
+  static JTextField threshholdText = new JTextField(3);
+
+  ChangeListener nearbyListener;
+  static Integer nearbyVal;
+  static JTextField nearbyText = new JTextField(3);
+
 
   //record the path!!!
   static String templatePath = "";
@@ -92,6 +110,117 @@ public class SwingFileChooserDemo extends JPanel implements ActionListener {
 
   public SwingFileChooserDemo(String image_name) {
     super(new BorderLayout());
+
+    resizeListener = new ChangeListener(){
+      public void stateChanged(ChangeEvent event)
+      {
+         // update text field when the slider value changes
+         JSlider source = (JSlider) event.getSource();
+         resizeVal = new Double(source.getValue())/10;
+         resizeText.setText("" + resizeVal);
+      }
+    };
+
+    threshholdListener = new ChangeListener(){
+      public void stateChanged(ChangeEvent event)
+      {
+         // update text field when the slider value changes
+         JSlider source = (JSlider) event.getSource();
+         threshholdVal = new Double(source.getValue())/10;
+         threshholdText.setText("" + threshholdVal);
+      }
+    };
+
+    nearbyListener = new ChangeListener(){
+      public void stateChanged(ChangeEvent event)
+      {
+         // update text field when the slider value changes
+         JSlider source = (JSlider) event.getSource();
+         nearbyVal = new Integer(source.getValue()) * 2 + 1;
+         nearbyText.setText("" + nearbyVal);
+      }
+    };
+
+
+
+    if (image_name.equals("slider")){
+      //Refactor Slider
+      JSlider resizeSlider = new JSlider(JSlider.HORIZONTAL, 0, 10, 2);
+      resizeSlider.setPaintTicks(true);
+      resizeSlider.setMajorTickSpacing(10);
+      resizeSlider.setMinorTickSpacing(1);
+
+      //Create the label table.
+      Hashtable<Integer, JLabel> labelTable = 
+          new Hashtable<Integer, JLabel>();
+      //PENDING: could use images, but we don't have any good ones.
+      labelTable.put(new Integer( 0 ),
+                     new JLabel("0") );
+                   //new JLabel(createImageIcon("images/stop.gif")) );
+      labelTable.put(new Integer( 10),
+                     new JLabel("1.0") );
+                   //new JLabel(createImageIcon("images/slow.gif")) );
+      resizeSlider.setLabelTable(labelTable);
+      resizeSlider.setPaintLabels(true);
+
+      resizeSlider.addChangeListener(resizeListener);
+      JPanel resizePanel = new JPanel();
+      resizePanel.add(new JLabel("Resize Factor "));
+      resizePanel.add(resizeSlider);
+      resizePanel.add(resizeText);
+      add(resizePanel, BorderLayout.WEST);
+
+
+
+      //threshhold Slider
+      JSlider threshholdSlider = new JSlider(JSlider.HORIZONTAL, 0, 10, 8);
+      threshholdSlider.setPaintTicks(true);
+      threshholdSlider.setMajorTickSpacing(10);
+      threshholdSlider.setMinorTickSpacing(1);
+
+      threshholdSlider.setLabelTable(labelTable);
+      threshholdSlider.setPaintLabels(true);
+
+      threshholdSlider.addChangeListener(threshholdListener);
+      JPanel threshholdPanel = new JPanel();
+      threshholdPanel.add(new JLabel("  Threshhold "));
+      threshholdPanel.add(threshholdSlider);
+      threshholdPanel.add(threshholdText);
+      add(threshholdPanel, BorderLayout.CENTER);
+
+
+
+
+      //Nearby
+      JSlider nearbySlider = new JSlider(JSlider.HORIZONTAL, 0, 15, 3);
+      nearbySlider.setPaintTicks(true);
+      nearbySlider.setMajorTickSpacing(15);
+      nearbySlider.setMinorTickSpacing(1);
+
+      //Create the label table.
+      Hashtable<Integer, JLabel> nearbyTable = 
+          new Hashtable<Integer, JLabel>();
+      //PENDING: could use images, but we don't have any good ones.
+      nearbyTable.put(new Integer( 0 ),
+                     new JLabel("1") );
+                   //new JLabel(createImageIcon("images/stop.gif")) );
+      nearbyTable.put(new Integer(15),
+                     new JLabel("31") );
+                   //new JLabel(createImageIcon("images/slow.gif")) );
+      nearbySlider.setLabelTable(nearbyTable);
+      nearbySlider.setPaintLabels(true);
+
+      nearbySlider.addChangeListener(nearbyListener);
+      JPanel nearbyPanel = new JPanel();
+      nearbyPanel.add(new JLabel(" Nearby Size "));
+      nearbyPanel.add(nearbySlider);
+      nearbyPanel.add(nearbyText);
+      add(nearbyPanel, BorderLayout.EAST);
+
+      return;
+    }
+
+
 
     if (image_name.equals("run")){
         JPanel buttonPanel = new JPanel(); //use FlowLayout
@@ -170,11 +299,12 @@ if (e.getSource() == openTemplateButton || e.getSource() == openTestButton) {
                                     JOptionPane.ERROR_MESSAGE);
     }
 
-    String filePath = "/Users/zhou/Documents/VE450/450project/template_matching_3.0/tempExe";
+    String filePath = "/Users/zhou/Documents/VE450/450project/template_matching_5.0/tempExe";
       if (new File(filePath).exists()) {
           try {
 
-              ProcessBuilder pb = new ProcessBuilder(filePath, templatePath, testPath);
+              ProcessBuilder pb = new ProcessBuilder(filePath, templatePath, testPath, 
+                Double.toString(resizeVal), Double.toString(threshholdVal), Integer.toString(nearbyVal));
               pb.redirectError();
               Process p = pb.start();
               InputStream is = p.getInputStream();
@@ -187,7 +317,7 @@ if (e.getSource() == openTemplateButton || e.getSource() == openTestButton) {
 
               //change image directly
               try{
-                BufferedImage bufImg=ImageIO.read(new File("/Users/zhou/Documents/VE450/450project/UI/annotation.jpg"));
+                BufferedImage bufImg=ImageIO.read(new File("/Users/zhou/Documents/VE450/450project/UI/annotation.png"));
                 testLog.setIcon(new ImageIcon(bufImg));
               }catch(IOException ex){
                System.out.println("Unable to read image file");
@@ -241,9 +371,13 @@ if (e.getSource() == openTemplateButton || e.getSource() == openTestButton) {
     //frame.getContentPane().add(controlPanel, BorderLayout.CENTER);
     centerPan.add(controlPanel);
 
+    JPanel sliderPanel = new SwingFileChooserDemo("slider");
+    southPan.add(sliderPanel);
 
     frame.getContentPane().add(northPan, BorderLayout.NORTH);
     frame.getContentPane().add(centerPan, BorderLayout.CENTER);
+    frame.getContentPane().add(southPan, BorderLayout.SOUTH);
+
     //Display the window.
     frame.pack();
     frame.setVisible(true);
