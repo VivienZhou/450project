@@ -126,7 +126,7 @@ public class SwingFileChooserDemo extends JPanel implements ActionListener {
       {
          // update text field when the slider value changes
          JSlider source = (JSlider) event.getSource();
-         threshholdVal = new Double(source.getValue())/10;
+         threshholdVal = new Double(source.getValue())/100;
          threshholdText.setText("" + threshholdVal);
       }
     };
@@ -173,12 +173,24 @@ public class SwingFileChooserDemo extends JPanel implements ActionListener {
 
 
       //threshhold Slider
-      JSlider threshholdSlider = new JSlider(JSlider.HORIZONTAL, 0, 10, 8);
+      JSlider threshholdSlider = new JSlider(JSlider.HORIZONTAL, 70, 100, 80);
       threshholdSlider.setPaintTicks(true);
       threshholdSlider.setMajorTickSpacing(10);
       threshholdSlider.setMinorTickSpacing(1);
 
-      threshholdSlider.setLabelTable(labelTable);
+            //Create the label table.
+      Hashtable<Integer, JLabel> threshTable = 
+          new Hashtable<Integer, JLabel>();
+      //PENDING: could use images, but we don't have any good ones.
+      threshTable.put(new Integer(70),
+                     new JLabel("0.70") );
+                   //new JLabel(createImageIcon("images/stop.gif")) );
+      threshTable.put(new Integer(100),
+                     new JLabel("1.00") );
+                   //new JLabel(createImageIcon("images/slow.gif")) );
+
+
+      threshholdSlider.setLabelTable(threshTable);
       threshholdSlider.setPaintLabels(true);
 
       threshholdSlider.addChangeListener(threshholdListener);
